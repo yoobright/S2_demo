@@ -1,5 +1,18 @@
 var part_map = {};
 
+const color_map = [
+  '#fbb4ae',
+  '#b3cde3',
+  '#ccebc5',
+  '#decbe4',
+  '#fed9a6',
+  '#ffffcc',
+  '#e5d8bd',
+  '#fddaec',
+  '#f2f2f2',
+]
+
+
 function toggle_part(p) {
   var data_selceted = p.attr("data_selceted");
   // console.log('svg click!!!!', this.id, data_selceted);
@@ -74,8 +87,12 @@ function tooltipd3(tltp_name) {
 }
 
 d3.xml("body_view2.svg").then((data) => {
-  d3.select("#svg-container").node().append(data.documentElement);
-  var s = d3.select("#svg-container").select("svg");
+  var svg_container = d3.select("#svg-container")
+  if (svg_container.empty())
+    return;
+
+  svg_container.node().append(data.documentElement);
+  var s = svg_container.select("svg");
   var p_list = s.selectAll("polygon");
   p_list.attr("data_selceted", "false");
 
@@ -114,4 +131,21 @@ d3.xml("body_view2.svg").then((data) => {
     .on("mouseout", tooltip.mouseout);
 
   // console.log(s);
+});
+
+
+$("#add_test_btn").click(function(){
+  console.log("add_test_btn pressed!!!");
+  var test_list = $("#test_list");
+  test_list.append("<li class='list-group-item'>An item</li>");
+  var test_list_li = test_list.children("li");
+
+  for(i = 0; i< test_list_li.length; i++) {
+    $(test_list_li[i]).css("background-color", color_map[i % 9]);
+  }
+});
+$("#rst_test_btn").click(function(){
+  console.log("rst_test_btn pressed!!!");
+  var test_list = $("#test_list");
+  test_list.children().remove();
 });

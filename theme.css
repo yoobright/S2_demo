@@ -1,5 +1,6 @@
 body {
   min-height: 75rem;
+  position: relative;
 }
 
 .card-header{
@@ -9,3 +10,31 @@ body {
   justify-content: center;
 
 }
+
+div.col-sm-9 div {
+  height: 250px;
+  font-size: 28px;
+}
+
+/* #fbb4ae
+#b3cde3
+#ccebc5
+#decbe4
+#fed9a6
+#ffffcc
+#e5d8bd
+#fddaec
+#f2f2f2 */
+
+#section1 {background-color: #fbb4ae;}
+#section2 {background-color: #b3cde3;}
+#section3 {background-color: #ccebc5;}
+#section4 {background-color: #decbe4;}
+#section5 {background-color: #fed9a6;}
+#section6 {background-color: #ffffcc;}
+#section7 {background-color: #e5d8bd;}
+#section8 {background-color: #fddaec;}
+#section9 {background-color: #f2f2f2;}
+
+
+
