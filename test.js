@@ -134,14 +134,14 @@ d3.xml("body_view2.svg").then((data) => {
 });
 
 
-$("#body_part_btn").click(function(){
+$("#add_test_btn").click(function(){
   console.log("add_test_btn pressed!!!");
-  var b_list = $("#body_part_list_group");
-  b_list.append("<li class='list-group-item'>An item</li>");
-  var b_list_li = b_list.children("li");
+  var test_list = $("#test_list");
+  test_list.append("<li class='list-group-item'>An item</li>");
+  var test_list_li = test_list.children("li");
 
-  for(i = 0; i< b_list_li.length; i++) {
-    $(b_list_li[i]).css("background-color", color_map[i % 9]);
+  for(i = 0; i< test_list_li.length; i++) {
+    $(test_list_li[i]).css("background-color", color_map[i % 9]);
   }
 });
 $("#rst_test_btn").click(function(){
