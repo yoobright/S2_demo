@@ -13,7 +13,7 @@ const color_map = [
 ]
 
 
-function toggle_part(p) {
+function toggle_part_view(p) {
   var data_selceted = p.attr("data_selceted");
   // console.log('svg click!!!!', this.id, data_selceted);
   if (data_selceted == "true") {
@@ -25,6 +25,12 @@ function toggle_part(p) {
     p.classed("st1", false);
     p.classed("st1_selected", true);
   }
+}
+
+function clear_part_view(p) {
+  p.attr("data_selceted", "false");
+  p.classed("st1", true);
+  p.classed("st1_selected", false);
 }
 
 function tooltipd3(tltp_name) {
@@ -98,7 +104,7 @@ d3.xml("body_view2.svg").then((data) => {
 
   p_list.on("click", function () {
     var p = d3.select(this);
-    toggle_part(p);
+    toggle_part_view(p);
   });
 
   var tooltip = tooltipd3();
@@ -107,28 +113,27 @@ d3.xml("body_view2.svg").then((data) => {
     return !d3.select(this).classed("st_label");
   });
 
-  t_list
-    .on("click", function () {
-      d3.event.preventDefault();
-      // console.log(this);
-      var this_node = d3.select(this);
-      // console.log(this_node);
-      var num = this_node.text();
-      // console.log(num);
-      var id_name = "#part_x5F_".concat(num);
-      // console.log(id_name);
-      var part_p = d3.select(this.parentNode).select(id_name);
-      // console.log(part_p);
-      toggle_part(part_p);
-    })
-    .on("mouseover", function () {
-      var this_node = d3.select(this);
-      var num = this_node.text();
-      var html = "part <b>" + num + "</b>";
-      tooltip.mouseover(html); // pass html content
-    })
-    .on("mousemove", tooltip.mousemove)
-    .on("mouseout", tooltip.mouseout);
+  t_list.on("click", function () {
+    d3.event.preventDefault();
+    // console.log(this);
+    var this_node = d3.select(this);
+    // console.log(this_node);
+    var num = this_node.text();
+    // console.log(num);
+    var id_name = "#part_x5F_".concat(num);
+    // console.log(id_name);
+    var part_p = d3.select(this.parentNode).select(id_name);
+    // console.log(part_p);
+    toggle_part_view(part_p);
+  })
+  .on("mouseover", function () {
+    var this_node = d3.select(this);
+    var num = this_node.text();
+    var html = "part <b>" + num + "</b>";
+    tooltip.mouseover(html); // pass html content
+  })
+  .on("mousemove", tooltip.mousemove)
+  .on("mouseout", tooltip.mouseout);
 
   // console.log(s);
 });
@@ -144,8 +149,11 @@ $("#body_part_btn").click(function(){
     $(b_list_li[i]).css("background-color", color_map[i % 9]);
   }
 });
-$("#rst_test_btn").click(function(){
-  console.log("rst_test_btn pressed!!!");
-  var test_list = $("#test_list");
-  test_list.children().remove();
+$("#body_clear_btn").click(function(){
+  console.log("body_clear_btn pressed!!!");
+  var p_list = d3.select("#svg-container").select("svg").selectAll("polygon")
+  console.log(p_list);
+  clear_part_view(p_list);
+  var b_list = $("#body_part_list_group");
+  b_list.children().remove();
 });
