@@ -126,7 +126,7 @@
 	<text transform="matrix(1 0 0 1 445.9141 218.7889)" class="st2 st3">16</text>
 	<text transform="matrix(1 0 0 1 377.6143 205.1593)" class="st2 st3">6</text>
 	<text transform="matrix(1 0 0 1 362.8001 282.2863)" class="st2 st3">10</text>
-	<text transform="matrix(1 0 0 1 529.0287 282.8477)" class="st2 st3">11</text>
+	<text transform="matrix(1 0 0 1 534.0287 282.8477)" class="st2 st3">8</text>
 	<text transform="matrix(1 0 0 1 523.2144 205.1597)" class="st2 st3">4</text>
 	<text transform="matrix(1 0 0 1 445.6351 263.6671)" class="st2 st3">18</text>
 	<text transform="matrix(1 0 0 1 419.5546 288.5993)" class="st2 st3">23</text>
@@ -138,8 +138,8 @@
 	<text transform="matrix(1 0 0 1 480.0571 380.7689)" class="st2 st3">26</text>
 	<text transform="matrix(1 0 0 1 411.7712 476.9738)" class="st2 st3">32</text>
 </g>
-<text transform="matrix(1 0 0 1 40.2573 47.5713)" class="st2 st5 st_label" font-weight="bold">正面</text>
-<text transform="matrix(1 0 0 1 320.486 47.5714)" class="st2 st5 st_label" font-weight="bold">背面</text>
+<text transform="matrix(1 0 0 1 40.2573 47.5713)" class="st2 st5 st_label" font-weight="bold">Front</text>
+<text transform="matrix(1 0 0 1 320.486 47.5714)" class="st2 st5 st_label" font-weight="bold">Back</text>
 <g id="label_x5F_view">
 </g>
 </svg>

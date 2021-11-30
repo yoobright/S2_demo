@@ -1,29 +1,30 @@
 var part_map = {};
 
 const color_map = [
-  '#fbb4ae',
-  '#b3cde3',
-  '#ccebc5',
-  '#decbe4',
-  '#fed9a6',
-  '#ffffcc',
-  '#e5d8bd',
-  '#fddaec',
-  '#f2f2f2',
-]
+  "#fbb4ae",
+  "#b3cde3",
+  "#ccebc5",
+  "#decbe4",
+  "#fed9a6",
+  "#ffffcc",
+  "#e5d8bd",
+  "#fddaec",
+  "#f2f2f2",
+];
 
-
-function toggle_part_view(p) {
+function toggle_part_view(p, body_id) {
   var data_selceted = p.attr("data_selceted");
   // console.log('svg click!!!!', this.id, data_selceted);
   if (data_selceted == "true") {
     p.attr("data_selceted", "false");
     p.classed("st1", true);
     p.classed("st1_selected", false);
+    del_body_part_item(body_id);
   } else {
     p.attr("data_selceted", "true");
     p.classed("st1", false);
     p.classed("st1_selected", true);
+    add_body_part_item(body_id);
   }
 }
 
@@ -31,6 +32,41 @@ function clear_part_view(p) {
   p.attr("data_selceted", "false");
   p.classed("st1", true);
   p.classed("st1_selected", false);
+}
+
+function update_body_part_item_color(items) {
+  for (i = 0; i < items.length; i++) {
+    $(items[i]).css("background-color", color_map[i % 9]);
+  }
+}
+function add_body_part_item(body_id) {
+  var b_list = $("#body_part_list_group");
+  var item_id = "body_item_" + body_id;
+
+  if ($(b_list).find("#" + item_id).length == 0) {
+    b_list.append(
+      (
+        "<li class='list-group-item' id='#ID'>" +
+        "Part" +
+        String(body_id) +
+        "</li>"
+      ).replace(/#ID/, item_id)
+    );
+
+    var b_list_li = b_list.children("li");
+    update_body_part_item_color(b_list_li);
+  }
+}
+
+function del_body_part_item(body_id) {
+  var b_list = $("#body_part_list_group");
+  var item_id = "body_item_" + body_id;
+  $(b_list)
+    .find("#" + item_id)
+    .remove();
+
+  var b_list_li = b_list.children("li");
+  update_body_part_item_color(b_list_li);
 }
 
 function tooltipd3(tltp_name) {
@@ -93,9 +129,8 @@ function tooltipd3(tltp_name) {
 }
 
 d3.xml("body_view2.svg").then((data) => {
-  var svg_container = d3.select("#svg-container")
-  if (svg_container.empty())
-    return;
+  var svg_container = d3.select("#svg-container");
+  if (svg_container.empty()) return;
 
   svg_container.node().append(data.documentElement);
   var s = svg_container.select("svg");
@@ -104,7 +139,7 @@ d3.xml("body_view2.svg").then((data) => {
 
   p_list.on("click", function () {
     var p = d3.select(this);
-    toggle_part_view(p);
+    toggle_part_view(p, p.attr("id").split("_")[2]);
   });
 
   var tooltip = tooltipd3();
@@ -113,45 +148,40 @@ d3.xml("body_view2.svg").then((data) => {
     return !d3.select(this).classed("st_label");
   });
 
-  t_list.on("click", function () {
-    d3.event.preventDefault();
-    // console.log(this);
-    var this_node = d3.select(this);
-    // console.log(this_node);
-    var num = this_node.text();
-    // console.log(num);
-    var id_name = "#part_x5F_".concat(num);
-    // console.log(id_name);
-    var part_p = d3.select(this.parentNode).select(id_name);
-    // console.log(part_p);
-    toggle_part_view(part_p);
-  })
-  .on("mouseover", function () {
-    var this_node = d3.select(this);
-    var num = this_node.text();
-    var html = "part <b>" + num + "</b>";
-    tooltip.mouseover(html); // pass html content
-  })
-  .on("mousemove", tooltip.mousemove)
-  .on("mouseout", tooltip.mouseout);
+  t_list
+    .on("click", function () {
+      d3.event.preventDefault();
+      // console.log(this);
+      var this_node = d3.select(this);
+      // console.log(this_node);
+      var body_id = this_node.text();
+      // console.log(num);
+      var id_name = "#part_x5F_".concat(body_id);
+      // console.log(id_name);
+      var part_p = d3.select(this.parentNode).select(id_name);
+      // console.log(part_p);
+      toggle_part_view(part_p, body_id);
+    })
+    .on("mouseover", function () {
+      var this_node = d3.select(this);
+      var num = this_node.text();
+      var html = "part <b>" + num + "</b>";
+      tooltip.mouseover(html); // pass html content
+    })
+    .on("mousemove", tooltip.mousemove)
+    .on("mouseout", tooltip.mouseout);
 
   // console.log(s);
 });
 
-
-$("#body_part_btn").click(function(){
+$("#body_part_btn").click(function () {
   console.log("add_test_btn pressed!!!");
-  var b_list = $("#body_part_list_group");
-  b_list.append("<li class='list-group-item'>An item</li>");
-  var b_list_li = b_list.children("li");
 
-  for(i = 0; i< b_list_li.length; i++) {
-    $(b_list_li[i]).css("background-color", color_map[i % 9]);
-  }
 });
-$("#body_clear_btn").click(function(){
+
+$("#body_clear_btn").click(function () {
   console.log("body_clear_btn pressed!!!");
-  var p_list = d3.select("#svg-container").select("svg").selectAll("polygon")
+  var p_list = d3.select("#svg-container").select("svg").selectAll("polygon");
   console.log(p_list);
   clear_part_view(p_list);
   var b_list = $("#body_part_list_group");
