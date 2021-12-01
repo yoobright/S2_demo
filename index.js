@@ -12,14 +12,14 @@ const color_map = [
   "#f2f2f2",
 ];
 
-function toggle_part_view(p, body_id) {
-  var data_selceted = p.attr("data_selceted");
+function togglePartView(p, body_id) {
+  var dataSelceted = p.attr("data_selceted");
   // console.log('svg click!!!!', this.id, data_selceted);
-  if (data_selceted == "true") {
+  if (dataSelceted == "true") {
     p.attr("data_selceted", "false");
     p.classed("st1", true);
     p.classed("st1_selected", false);
-    del_body_part_item(body_id);
+    delBodyPartItem(body_id);
   } else {
     p.attr("data_selceted", "true");
     p.classed("st1", false);
@@ -28,45 +28,45 @@ function toggle_part_view(p, body_id) {
   }
 }
 
-function clear_part_view(p) {
+function clearPartView(p) {
   p.attr("data_selceted", "false");
   p.classed("st1", true);
   p.classed("st1_selected", false);
 }
 
-function update_body_part_item_color(items) {
+function updateBodyPartItemColor(items) {
   for (i = 0; i < items.length; i++) {
     $(items[i]).css("background-color", color_map[i % 9]);
   }
 }
 function add_body_part_item(body_id) {
-  var b_list = $("#body_part_list_group");
-  var item_id = "body_item_" + body_id;
+  var bList = $("#body_part_list_group");
+  var itemID = "body_item_" + body_id;
 
-  if ($(b_list).find("#" + item_id).length == 0) {
-    b_list.append(
+  if ($(bList).find("#" + itemID).length == 0) {
+    bList.append(
       (
         "<li class='list-group-item' id='#ID'>" +
         "Part" +
         String(body_id) +
         "</li>"
-      ).replace(/#ID/, item_id)
+      ).replace(/#ID/, itemID)
     );
 
-    var b_list_li = b_list.children("li");
-    update_body_part_item_color(b_list_li);
+    var items = bList.children("li");
+    updateBodyPartItemColor(items);
   }
 }
 
-function del_body_part_item(body_id) {
-  var b_list = $("#body_part_list_group");
-  var item_id = "body_item_" + body_id;
-  $(b_list)
-    .find("#" + item_id)
+function delBodyPartItem(bodyID) {
+  var bList = $("#body_part_list_group");
+  var itemID = "body_item_" + bodyID;
+  $(bList)
+    .find("#" + itemID)
     .remove();
 
-  var b_list_li = b_list.children("li");
-  update_body_part_item_color(b_list_li);
+  var items = bList.children("li");
+  updateBodyPartItemColor(items);
 }
 
 function tooltipd3(tltp_name) {
@@ -96,7 +96,7 @@ function tooltipd3(tltp_name) {
     s.t.html(html).transition().duration(300).style("opacity", 1);
 
     /** After innerhtml on tooltip get w & h */
-    s.get_t_size();
+    s.getTSize();
   };
 
   s.mousemove = function () {
@@ -119,7 +119,7 @@ function tooltipd3(tltp_name) {
   };
 
   /** Get width and height of tooltip and set w & h of Tooltip class */
-  s.get_t_size = function () {
+  s.getTSize = function () {
     var size = s.t.node().getBoundingClientRect();
     s.w = size.width;
     s.h = size.height;
@@ -129,42 +129,38 @@ function tooltipd3(tltp_name) {
 }
 
 d3.xml("body_view2.svg").then((data) => {
-  var svg_container = d3.select("#svg-container");
-  if (svg_container.empty()) return;
+  var svgContainer = d3.select("#svg-container");
+  if (svgContainer.empty()) return;
 
-  svg_container.node().append(data.documentElement);
-  var s = svg_container.select("svg");
-  var p_list = s.selectAll("polygon");
-  p_list.attr("data_selceted", "false");
+  svgContainer.node().append(data.documentElement);
+  var s = svgContainer.select("svg");
+  var pList = s.selectAll("polygon");
+  pList.attr("data_selceted", "false");
 
-  p_list.on("click", function () {
+  pList.on("click", function () {
     var p = d3.select(this);
-    toggle_part_view(p, p.attr("id").split("_")[2]);
+    togglePartView(p, p.attr("id").split("_")[2]);
   });
 
   var tooltip = tooltipd3();
-  var t_list = s.selectAll("text").filter(function () {
+  var bodyTextList = s.selectAll("text").filter(function () {
     // console.log(d3.select(this).classed('st_label'))
     return !d3.select(this).classed("st_label");
   });
 
-  t_list
+  bodyTextList
     .on("click", function () {
       d3.event.preventDefault();
-      // console.log(this);
-      var this_node = d3.select(this);
-      // console.log(this_node);
-      var body_id = this_node.text();
-      // console.log(num);
-      var id_name = "#part_x5F_".concat(body_id);
-      // console.log(id_name);
-      var part_p = d3.select(this.parentNode).select(id_name);
-      // console.log(part_p);
-      toggle_part_view(part_p, body_id);
+      var thisNode = d3.select(this);
+      var bodyID = thisNode.text();
+      var idName = "#part_x5F_".concat(bodyID);
+      var partPolygon = d3.select(this.parentNode).select(idName);
+
+      togglePartView(partPolygon, bodyID);     
     })
     .on("mouseover", function () {
-      var this_node = d3.select(this);
-      var num = this_node.text();
+      var thisNode = d3.select(this);
+      var num = thisNode.text();
       var html = "part <b>" + num + "</b>";
       tooltip.mouseover(html); // pass html content
     })
@@ -181,9 +177,9 @@ $("#body_part_btn").click(function () {
 
 $("#body_clear_btn").click(function () {
   console.log("body_clear_btn pressed!!!");
-  var p_list = d3.select("#svg-container").select("svg").selectAll("polygon");
-  console.log(p_list);
-  clear_part_view(p_list);
-  var b_list = $("#body_part_list_group");
-  b_list.children().remove();
+  var pList = d3.select("#svg-container").select("svg").selectAll("polygon");
+  console.log(pList);
+  clearPartView(pList);
+  var bList = $("#body_part_list_group");
+  bList.children().remove();
 });
