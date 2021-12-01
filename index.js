@@ -12,6 +12,44 @@ const color_map = [
   "#f2f2f2",
 ];
 
+const bodyItemTemplate = ({ id, name }) => `
+<li class='list-group-item py-2 d-flex justify-content-between align-items-center body-item' id='${id}'>
+  <button type="button" class="btn btn-outline-primary btn-sm mm-btn" >${name}</button>
+  <div class="btn-group btn-group-toggle" data-toggle="buttons" >
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option1" autocomplete="off" value="1"> 1
+  </label>
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option2" autocomplete="off" value="2"> 2
+  </label>
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option3" autocomplete="off" value="3"> 3
+  </label>
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option4" autocomplete="off" value="4"> 4
+  </label>
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option5" autocomplete="off" value="5"> 5
+  </label>
+  <label  class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option6" autocomplete="off" value="6"> 6
+  </label>
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option7" autocomplete="off" value="7"> 7
+  </label>
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option8" autocomplete="off" value="8"> 8
+  </label>
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option9" autocomplete="off" value="9"> 9
+  </label>
+  <label class="btn btn-outline-primary btn-sm">
+    <input type="radio" name="options" id="option9" autocomplete="off" value="10"> 10
+  </label>
+</div>
+</li>
+`;
+
 function togglePartView(p, body_id) {
   var dataSelceted = p.attr("data_selceted");
   // console.log('svg click!!!!', this.id, data_selceted);
@@ -44,14 +82,11 @@ function add_body_part_item(body_id) {
   var itemID = "body_item_" + body_id;
 
   if ($(bList).find("#" + itemID).length == 0) {
-    bList.append(
-      (
-        "<li class='list-group-item' id='#ID'>" +
-        "Part" +
-        String(body_id) +
-        "</li>"
-      ).replace(/#ID/, itemID)
-    );
+    var item = bodyItemTemplate({
+      id: itemID,
+      name: "Part" + String(body_id),
+    });
+    bList.append(item);
 
     var items = bList.children("li");
     updateBodyPartItemColor(items);
@@ -156,7 +191,7 @@ d3.xml("body_view2.svg").then((data) => {
       var idName = "#part_x5F_".concat(bodyID);
       var partPolygon = d3.select(this.parentNode).select(idName);
 
-      togglePartView(partPolygon, bodyID);     
+      togglePartView(partPolygon, bodyID);
     })
     .on("mouseover", function () {
       var thisNode = d3.select(this);
@@ -172,7 +207,6 @@ d3.xml("body_view2.svg").then((data) => {
 
 $("#body_part_btn").click(function () {
   console.log("add_test_btn pressed!!!");
-
 });
 
 $("#body_clear_btn").click(function () {

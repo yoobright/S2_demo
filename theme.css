@@ -8,6 +8,14 @@ div.col-sm-9 div {
   font-size: 28px;
 }
 
+.mm-btn{
+  width:75px;
+}
+
+.body-item:hover {
+  opacity:1;
+}
+
 /* #fbb4ae
 #b3cde3
 #ccebc5
