@@ -12,38 +12,38 @@ const color_map = [
   "#f2f2f2",
 ];
 
-const bodyItemTemplate = ({ id, name }) => `
-<li class='list-group-item py-2 d-flex justify-content-between align-items-center body-item' id='${id}'>
+const bodyItemTemplate = ({ id, itemId, name }) => `
+<li class='list-group-item py-2 d-flex justify-content-between align-items-center body-item' id='${itemId}' body_id='${id}'>
   <button type="button" class="btn btn-outline-primary btn-sm mm-btn" >${name}</button>
-  <div class="btn-group btn-group-toggle" data-toggle="buttons" >
-  <label class="btn btn-outline-primary btn-sm">
+  <div class="btn-group btn-group-toggle level-btn" data-toggle="buttons" >
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option1" autocomplete="off" value="1"> 1
   </label>
-  <label class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option2" autocomplete="off" value="2"> 2
   </label>
-  <label class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option3" autocomplete="off" value="3"> 3
   </label>
-  <label class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option4" autocomplete="off" value="4"> 4
   </label>
-  <label class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option5" autocomplete="off" value="5"> 5
   </label>
-  <label  class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option6" autocomplete="off" value="6"> 6
   </label>
-  <label class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option7" autocomplete="off" value="7"> 7
   </label>
-  <label class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option8" autocomplete="off" value="8"> 8
   </label>
-  <label class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option9" autocomplete="off" value="9"> 9
   </label>
-  <label class="btn btn-outline-primary btn-sm">
+  <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option9" autocomplete="off" value="10"> 10
   </label>
 </div>
@@ -57,11 +57,13 @@ function togglePartView(p, body_id) {
     p.attr("data_selceted", "false");
     p.classed("st1", true);
     p.classed("st1_selected", false);
+    p.style("opacity", 0.5);
     delBodyPartItem(body_id);
   } else {
     p.attr("data_selceted", "true");
     p.classed("st1", false);
     p.classed("st1_selected", true);
+    p.style("opacity", 0.4);
     add_body_part_item(body_id);
   }
 }
@@ -70,6 +72,7 @@ function clearPartView(p) {
   p.attr("data_selceted", "false");
   p.classed("st1", true);
   p.classed("st1_selected", false);
+  p.style("opacity", 0.5);
 }
 
 function updateBodyPartItemColor(items) {
@@ -79,13 +82,15 @@ function updateBodyPartItemColor(items) {
 }
 function add_body_part_item(body_id) {
   var bList = $("#body_part_list_group");
-  var itemID = "body_item_" + body_id;
+  var itemId = "body_item_" + body_id;
 
-  if ($(bList).find("#" + itemID).length == 0) {
+  if ($(bList).find("#" + itemId).length == 0) {
     var item = bodyItemTemplate({
-      id: itemID,
+      id: body_id,
+      itemId: itemId,
       name: "Part" + String(body_id),
     });
+
     bList.append(item);
 
     var items = bList.children("li");
@@ -102,6 +107,12 @@ function delBodyPartItem(bodyID) {
 
   var items = bList.children("li");
   updateBodyPartItemColor(items);
+}
+
+function getPartViewById(id) {
+  var partId = "part_x5F_" + id;
+  var sel = "#svg-container svg polygon";
+  return $(sel).filter("#" + partId);
 }
 
 function tooltipd3(tltp_name) {
@@ -217,3 +228,26 @@ $("#body_clear_btn").click(function () {
   var bList = $("#body_part_list_group");
   bList.children().remove();
 });
+
+
+$("#body_clear_btn").click(function () {
+  console.log("body_clear_btn pressed!!!");
+  var pList = d3.select("#svg-container").select("svg").selectAll("polygon");
+  console.log(pList);
+  clearPartView(pList);
+  var bList = $("#body_part_list_group");
+  bList.children().remove();
+});
+
+$("#body_part_list_group").on("change", "input", function () {
+  var body_id = $(this).parent().parent().parent().attr("body_id");
+  var level = parseInt($(this).val());
+  // console.log(level)
+  var opacity = 0.5 + 0.05 * level;
+  var p = getPartViewById(body_id);
+  p.css("opacity", opacity);
+});
+
+
+
+
