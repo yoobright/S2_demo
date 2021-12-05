@@ -12,6 +12,20 @@ const color_map = [
   "#f2f2f2",
 ];
 
+const red_map = [
+  "#fbb4ae",
+  "#f3a09b",
+  "#eb8c87",
+  "#e37874",
+  "#db6461",
+  "#d3504d",
+  "#cb3c3a",
+  "#c32827",
+  "#bb1413",
+  "#b30000",
+];
+
+
 const bodyItemTemplate = ({ id, itemId, name }) => `
 <li class='list-group-item py-2 d-flex justify-content-between align-items-center body-item' id='${itemId}' body_id='${id}'>
   <button type="button" class="btn btn-outline-primary btn-sm mm-btn" >${name}</button>
@@ -58,6 +72,7 @@ function togglePartView(p, body_id) {
     p.classed("st1", true);
     p.classed("st1_selected", false);
     p.style("opacity", 0.5);
+    p.style("fill", "");
     delBodyPartItem(body_id);
   } else {
     p.attr("data_selceted", "true");
@@ -73,6 +88,7 @@ function clearPartView(p) {
   p.classed("st1", true);
   p.classed("st1_selected", false);
   p.style("opacity", 0.5);
+  p.style("fill", "");
 }
 
 function updateBodyPartItemColor(items) {
@@ -239,13 +255,19 @@ $("#body_clear_btn").click(function () {
   bList.children().remove();
 });
 
+
+function updadeBodyRedLevel(body_id, level) {
+  var p = getPartViewById(body_id);
+  p.css("opacity", 1.0);
+  p.css("fill", red_map[level -1]);
+}
+
+
 $("#body_part_list_group").on("change", "input", function () {
   var body_id = $(this).parent().parent().parent().attr("body_id");
   var level = parseInt($(this).val());
   // console.log(level)
-  var opacity = 0.5 + 0.05 * level;
-  var p = getPartViewById(body_id);
-  p.css("opacity", opacity);
+  updadeBodyRedLevel(body_id, level);
 });
 
 
