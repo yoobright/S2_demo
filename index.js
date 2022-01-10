@@ -27,9 +27,10 @@ const red_map = [
 
 
 const bodyItemTemplate = ({ id, itemId, name }) => `
-<li class='list-group-item py-2 d-flex justify-content-between align-items-center body-item' id='${itemId}' body_id='${id}'>
-  <button type="button" class="btn btn-outline-primary btn-sm mm-btn" >${name}</button>
-  <div class="btn-group btn-group-toggle level-btn" data-toggle="buttons" >
+<li class='list-group-item d-flex align-items-center body-item' id='${itemId}' body_id='${id}'>
+  <div class="row">
+  <div class="col" >${name}</div>
+  <div class="btn-group btn-group-toggle level-btn col" data-toggle="buttons" >
   <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option1" autocomplete="off" value="1"> 1
   </label>
@@ -60,7 +61,8 @@ const bodyItemTemplate = ({ id, itemId, name }) => `
   <label class="btn btn-outline-primary btn-xs">
     <input type="radio" name="options" id="option9" autocomplete="off" value="10"> 10
   </label>
-</div>
+  </div>
+  </div>
 </li>
 `;
 
@@ -201,7 +203,10 @@ d3.xml("body_view2.svg").then((data) => {
 
   pList.on("click", function () {
     var p = d3.select(this);
-    togglePartView(p, p.attr("id").split("_")[2]);
+    var body_id = p.attr("id").split("_")[2];
+    if (body_id.match(/\d+/)) {
+      togglePartView(p, body_id);
+    }
   });
 
   var tooltip = tooltipd3();
@@ -264,9 +269,9 @@ function updadeBodyRedLevel(body_id, level) {
 
 
 $("#body_part_list_group").on("change", "input", function () {
-  var body_id = $(this).parent().parent().parent().attr("body_id");
+  var body_id = $(this).parents(".body-item").attr("body_id");
   var level = parseInt($(this).val());
-  // console.log(level)
+  // console.log($(this).parents())
   updadeBodyRedLevel(body_id, level);
 });
 
