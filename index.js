@@ -192,50 +192,84 @@ function tooltipd3(tltp_name) {
   return s;
 }
 
-d3.xml("body_view2.svg").then((data) => {
-  var svgContainer = d3.select("#svg-container");
-  if (svgContainer.empty()) return;
 
-  svgContainer.node().append(data.documentElement);
-  var s = svgContainer.select("svg");
-  var pList = s.selectAll("polygon");
-  pList.attr("data_selceted", "false");
+d3.select("#body-view-svg").selectAll("polygon").attr("data_selceted", "false");
 
-  pList.on("click", function () {
-    var p = d3.select(this);
-    var body_id = p.attr("id").split("_")[2];
-    if (body_id.match(/\d+/)) {
-      togglePartView(p, body_id);
-    }
-  });
+d3.select("#body-view-svg").selectAll("polygon").on("click", function () {
+  var p = d3.select(this);
+  var body_id = p.attr("id").split("_")[2];
+  if (body_id.match(/\d+/)) {
+    togglePartView(p, body_id);
+  }
+});
 
-  var tooltip = tooltipd3();
-  var bodyTextList = s.selectAll("text").filter(function () {
-    // console.log(d3.select(this).classed('st_label'))
-    return !d3.select(this).classed("st_label");
-  });
+var tooltip = tooltipd3();
 
-  bodyTextList
+d3.select("#body-view-svg").selectAll("text").filter(function () {
+      // console.log(d3.select(this).classed('st_label'))
+      return !d3.select(this).classed("st_label");
+    })
     .on("click", function () {
-      d3.event.preventDefault();
-      var thisNode = d3.select(this);
-      var bodyID = thisNode.text();
+      var bodyID = d3.select(this).text().trim();
       var idName = "#part_x5F_".concat(bodyID);
       var partPolygon = d3.select(this.parentNode).select(idName);
-
       togglePartView(partPolygon, bodyID);
     })
     .on("mouseover", function () {
       var thisNode = d3.select(this);
-      var num = thisNode.text();
+      var num = thisNode.text().trim();
       var html = "part <b>" + num + "</b>";
       tooltip.mouseover(html); // pass html content
     })
     .on("mousemove", tooltip.mousemove)
-    .on("mouseout", tooltip.mouseout);
+    .on("mouseout", tooltip.mouseout)
+    ;
 
-  // console.log(s);
-});
+
+// d3.select("#svg-container").then((svgContainer) => {
+//   // var svgContainer = d3.select("#svg-container");
+//   if (svgContainer.empty()) return;
+
+//   // svgContainer.node().append(data.documentElement);
+//   var s = svgContainer.select("svg");
+//   var pList = s.selectAll("polygon");
+//   pList.attr("data_selceted", "false");
+
+//   pList.on("click", function () {
+//     var p = d3.select(this);
+//     var body_id = p.attr("id").split("_")[2];
+//     if (body_id.match(/\d+/)) {
+//       togglePartView(p, body_id);
+//     }
+//   });
+
+//   var tooltip = tooltipd3();
+//   var bodyTextList = s.selectAll("text").filter(function () {
+//     // console.log(d3.select(this).classed('st_label'))
+//     return !d3.select(this).classed("st_label");
+//   });
+
+//   bodyTextList
+//     .on("click", function () {
+//       d3.event.preventDefault();
+//       var thisNode = d3.select(this);
+//       var bodyID = thisNode.text();
+//       var idName = "#part_x5F_".concat(bodyID);
+//       var partPolygon = d3.select(this.parentNode).select(idName);
+
+//       togglePartView(partPolygon, bodyID);
+//     })
+//     .on("mouseover", function () {
+//       var thisNode = d3.select(this);
+//       var num = thisNode.text();
+//       var html = "part <b>" + num + "</b>";
+//       tooltip.mouseover(html); // pass html content
+//     })
+//     .on("mousemove", tooltip.mousemove)
+//     .on("mouseout", tooltip.mouseout);
+
+//   // console.log(s);
+// });
 
 $("#body_part_btn").click(function () {
   console.log("add_test_btn pressed!!!");
